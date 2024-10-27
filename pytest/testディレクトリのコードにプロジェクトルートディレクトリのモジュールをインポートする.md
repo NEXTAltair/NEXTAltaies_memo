@@ -1,6 +1,6 @@
 # Pytest でプロジェクトモジュールをインポートする方法
 
-## 俺は｢conftest.py｣か.vscode/settings.jsonしか使ったことはない
+## 俺は｢conftest.py｣か.vscode/settings.json しか使ったことはない
 
 Pytest でテストを書く際、テストディレクトリからプロジェクトのソースコードをインポートする方法は複数存在する。
 それぞれの方法には長所と短所があるため、プロジェクトの要件に応じて適切な方法を選択する必要がある。
@@ -238,34 +238,37 @@ your-project/
 
 ### 2. pyproject.toml の設定
 
+[NatureRemoMatterControl](https://github.com/NEXTAltair/NatureRemoMatterControl/tree/add-network-error-handling)
+
+pyproject.toml の名前は変えない
+
 ```toml
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
 [project]
-name = "your-package"
+name = "NatureRemoMatterControl"
 version = "0.1.0"
-description = "Your package description"
-requires-python = ">=3.8"
-dependencies = [
-    "pytest>=7.0",
-]
+description = "Nature Remo E で潮流を監視して TP-Link スマートプラグを制御する"
+requires-python = ">=3.12.4"
+dependencies = ["pytest>=8.3.3"]
+
+# 追加: 開発環境情報
+classifiers = ["Operating System :: Microsoft :: Windows :: Windows 11"]
 
 [tool.pytest.ini_options]
-addopts = "-ra -q"
-testpaths = [
-    "tests",
-]
-pythonpath = [
-    "src"
-]
+addopts = "-ra -q -v"
+testpaths = ["test"]
+pythonpath = ["src"]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.0",
-    "pytest-cov>=4.0",
-]
+dev = ["pytest>=8.3.3", "pytest-cov>=5.0.0"]
+
+
 ```
 
 ### 3. VSCode 設定の実装
@@ -274,26 +277,32 @@ dev = [
 
 ```jsonc
 {
-  // Python設定
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    // Python設定
+    "python.defaultInterpreterPath": "${workspaceFolder}/venv/Scripts/python.exe",
 
-  // インポートパス設定
-  "python.analysis.extraPaths": ["${workspaceFolder}/src"],
+    // パス設定（統合）
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/test"  // もしテストモジュールのインポートも必要なら
+    ],
 
-  // テスト設定
-  "python.testing.pytestEnabled": true,
-  "python.testing.unittestEnabled": false,
-  "python.testing.nosetestsEnabled": false,
-  "python.testing.pytestArgs": ["tests"],
+    // テスト設定
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestArgs": ["test"],  // あるいは "tests" - プロジェクト構造に合わせる
 
-  // エディタ設定
-  "editor.formatOnSave": true,
-  "python.formatting.provider": "black",
-
-  // リンター設定
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": false,
-  "python.linting.flake8Enabled": true
+    // Pylint設定
+    "pylint.enabled": true,
+    "pylint.args": [
+        "--init-hook",
+        "import sys; sys.path.append('src')"
+    ],
+    // エディタ設定
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.stylelint": "always"
+    }
 }
 ```
 
