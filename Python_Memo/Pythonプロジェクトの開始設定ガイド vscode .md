@@ -161,6 +161,77 @@ from your_package.exceptions import CustomError
 5. VSCode 設定の確認
 6. テストの実行確認
 
+# 9. ワークスペース設定とpyproject.tomlの作成
+
+コーディングを開始する前に、ワークスペースの設定とpyproject.tomlの作成を行う。開発環境の一貫性がとチーム開発やパッケージの配布が容易になる。
+
+## ワークスペース設定
+
+VSCodeのワークスペース設定ファイル（例: `.vscode/settings.json`）でプロジェクト固有の設定を定義する。
+
+以下は、基本的な設定例。
+
+```json
+{
+  // Python設定
+  "python.defaultInterpreterPath": "${workspaceFolder}/venv/Scripts/python.exe",
+
+  // パス設定
+  "python.analysis.extraPaths": ["${workspaceFolder}/src"],
+
+  // テスト設定
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["test"],
+
+  // Pylint設定
+  "pylint.enabled": true,
+  "pylint.args": [
+    "--init-hook",
+    "import sys; sys.path.append('src')"
+  ]
+}
+```
+
+## pyproject.tomlの作成
+
+pyproject.tomlファイルを作成し、プロジェクトの依存関係やビルド設定を定義する。
+
+以下は、基本的な設定例。
+
+```toml
+# build-systemがなんなのか俺は知らない
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "your-package"
+version = "0.1.0"
+description = "Your package description"
+requires-python = ">=3.12.4"
+dependencies = [
+    "requests>=2.31.0",  # 必要な依存関係
+]
+classifiers = [
+    "Operating System :: Microsoft :: Windows :: Windows 11"  # 開発環境情報
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra -q -v"
+testpaths = ["test",]
+pythonpath = ["src"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3.3","pytest-cov>=5.0.0"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]  # パッケージのソースディレクトリを指定
+```
+
+# 10. 詳細な説明
+
+プロジェクト、パッケージ、ワークスペースの詳細な説明は、[このドキュメント](Python_Memo/ワークスペース_プロジェクト_パッケージ.md)。
+
 # 注意点
 
 1. パッケージ名の一貫性
