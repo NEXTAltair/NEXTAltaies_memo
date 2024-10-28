@@ -69,8 +69,6 @@ packages = ["src"]  # パッケージのソースディレクトリを指定
 
 `.vscode/settings.json`:
 
-pylint で **"import sys; sys.path.append('src')"** でパスを追加してないとインタプリタでインポートできててもpylintがインポートできてない言い出す
-
 ```json
 {
   // Python設定
@@ -88,7 +86,8 @@ pylint で **"import sys; sys.path.append('src')"** でパスを追加してな�
     "pylint.enabled": true,
     "pylint.args": [
         "--init-hook",
-        "import sys; sys.path.append('src')"
+        "import sys; sys.path.append('src')", # パスを追加してないとインタプリタでインポートできててもpylintがインポートできてない言い出す
+	"--disable=W1203" # ロガーで%s 使えという特に意味のない指示(議論が分かれるらしい)を無視
     ]
 }
 ```
@@ -189,3 +188,11 @@ venv/
    - 相対インポートを使用する場合は明示的に
 
 この設定により、開発環境の一貫性が保たれ、チーム開発やパッケージの配布が容易になります。
+
+# **参考**
+
+1. https://nikkie-ftnext.hatenablog.com/entry/why-dont-you-write-pyproject-toml-instead-of-setup-py
+2. https://nikkie-ftnext.hatenablog.com/entry/pyproject-toml-project-keys-and-examples
+3. https://zenn.dev/karaage0703/articles/db8c663640c68b
+4. https://data.gunosy.io/entry/linter_option_on_pyproject
+5. https://github.com/pfnet/pysen
