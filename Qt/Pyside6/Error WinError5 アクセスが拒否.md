@@ -1,5 +1,7 @@
 # PySide6 インストールエラー：[WinError 5] アクセスが拒否されました
 
+結論 CURSORを管理者モードで起動すれば多分起きない
+
 ## エラーの概要
 
 ```
@@ -28,7 +30,7 @@ ERROR: Could not install packages due to an OSError: [WinError 5] アクセス�
 
 #### 原因
 
-- VSCode、Python インタープリタ、または他のプロセスが`msvcp140.dll`を使用中
+- VSCode、Python インタープリタ、または他のプロセスが `msvcp140.dll`を使用中
 - PySide6 を使用しているアプリケーションが実行中
 
 #### 解決方法
@@ -79,7 +81,6 @@ ERROR: Could not install packages due to an OSError: [WinError 5] アクセス�
    # 注意: VSCodeやPyCharmなどのIDEから起動されたPythonプロセスは
    # IDE自体を終了する必要がある場合があります。
    ```
-
 2. VSCode を完全に終了
 
    ```powershell
@@ -144,8 +145,8 @@ pip install --upgrade pyside6 --no-cache-dir
    # パッケージの再インストール
    pip install pyside6
    ```
-
 2. キャッシュクリア付きインストール
+
    ```powershell
    pip cache purge
    pip install --upgrade pyside6 --no-cache-dir
@@ -172,7 +173,6 @@ pip install --upgrade pyside6 --no-cache-dir
    .\venv\Scripts\Activate.ps1
    pip install pyside6
    ```
-
 2. 8.3 形式のショートパス名を使用
 
    ```powershell
@@ -190,22 +190,21 @@ pip install --upgrade pyside6 --no-cache-dir
    - すべての Python プロセスを終了
    - VSCode を完全に終了
    - アンチウイルスソフトの除外設定を確認
-
 2. クリーンな環境での実行
 
    - 新しい管理者権限の PowerShell ウィンドウを使用
    - キャッシュを使用しないインストール
    - 必要に応じて仮想環境を再作成
-
 3. トラブルシューティング
+
    - エラーメッセージを注意深く確認
    - プロセスの実行状態を確認
    - 権限とパスの問題を順次確認
 
 ## 注意事項
 
-- バックアップ：仮想環境を再作成する前に、必要に応じて`requirements.txt`を作成
-- ログ：トラブルシューティング時は`--verbose`オプションを使用して詳細情報を取得
+- バックアップ：仮想環境を再作成する前に、必要に応じて `requirements.txt`を作成
+- ログ：トラブルシューティング時は `--verbose`オプションを使用して詳細情報を取得
 - 回避策：問題が解決しない場合は、異なるバージョンの PySide6 を試すことも検討
 
 ## より安全なインストール方法
